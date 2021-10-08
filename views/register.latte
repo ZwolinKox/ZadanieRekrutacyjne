@@ -1,0 +1,81 @@
+{layout 'layouts/layout.latte'}
+
+{block content}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card bg-light">
+                <div class="card-header">Zarejestruj</div>
+
+                <div class="card-body">
+                    <form method="POST" action="./register">
+
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">Nazwa użytkownika</label>
+                            <div class="col-md-6">
+                                <input id="name" type="text" class="form-control {ifset $errorName} is-invalid {/ifset}" name="name" required autocomplete="name" autofocus>
+
+                                {ifset $errorName}
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{$errorName}</strong>
+                                    </span>
+                                {/ifset}
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="email" class="col-md-4 col-form-label text-md-right">Adres email</label>
+
+                            <div class="col-md-6">
+                                <input id="email" type="email" class="form-control {ifset $errorEmail} is-invalid {/ifset}" name="email" required autocomplete="email">
+
+                                {ifset $errorEmail}
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{$errorEmail}</strong>
+                                    </span>
+                                {/ifset}
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="password" class="col-md-4 col-form-label text-md-right">Hasło</label>
+
+                            <div class="col-md-6">
+                                <input id="password" type="password" class="form-control {ifset $errorPassword} is-invalid {/ifset}" name="password" required autocomplete="new-password">
+
+                                {ifset $errorPassword}
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{$errorPassword}</strong>
+                                    </span>
+                                {/ifset}
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">Potwierdź hasło</label>
+
+                            <div class="col-md-6">
+                                <input id="password-confirm" type="password" class="form-control {ifset $errorSecondPassword} is-invalid {/ifset}" name="password_confirmation" required autocomplete="new-password">
+
+                                {ifset $errorSecondPassword}
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{$errorSecondPassword}</strong>
+                                    </span>
+                                {/ifset}
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-0">
+                            <div class="col-md-6 offset-md-7">
+                                <button type="submit" class="btn btn-outline-primary">
+                                    Zarejestruj
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

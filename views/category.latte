@@ -1,0 +1,156 @@
+{layout 'layouts/layout.latte'}
+
+{block title}Kategorie{/block}
+
+
+{block content}
+
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="editModalLabel">Edytuj kategorie</h5>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" id="editForm" action="./categories/edit/1">
+                <div class="form-group">
+                    <label for="categoryName" class="col-form-label">Nazwa kategorii:</label>
+                    <input type="text" class="form-control" name="categoryName" id="editCategoryName">
+                </div>             
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+            </div>
+        </form>
+        </div>
+    </div>
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Czy na pewno chcesz usunąć kategorie <span id="deleteCategoryName"></span> </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <button type="submit" class="btn btn-md btn-danger" id="deleteCategoryHref">Tak</button>
+                <button type="button" class="btn btn-md btn-primary" data-bs-dismiss="modal" aria-label="Close" class="btn btn-primary">Nie</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    
+    <div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="newModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newModalLabel">Nowa kategoria </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <div class="modal-body">
+            <form method="POST" id="newForm" action="./categories">
+                    <div class="form-group">
+                        <label for="categoryName" class="col-form-label">Nazwa kategorii:</label>
+                        <input type="text" class="form-control" name="categoryName" id="newCategoryName">
+                    </div>    
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                    <button type="submit" class="btn btn-primary">Dodaj kategorie</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <div class="container body-content">
+    <button type="button" class="btn btn-primary" style="margin: 15px" onclick="location.href='./home'">Wróć do menu</button>
+        <div class="page-header">
+            <h2 style="text-align: center">Kategorie</h2>
+            <div class="form-group">
+                <fieldset>
+                    <form action="" class="form-group" method="post">
+                        <div class="table-responsive">
+                            <div class="table-responsive">     
+                                <button type="button" class="float-right btn btn-primary" data-bs-target="#newModal" data-bs-toggle="modal" style="margin: 15px">Dodaj kategorie</button>
+
+                                <div>
+                                    {foreach $errors as $element}
+                                        {foreach $element as $message}
+                                            <h6 style="color: red;">{$message}</h6>
+                                        {/foreach}
+                                    {/foreach}
+                                </div>
+
+                                <table id="table" class="table table-striped table-bordered" cellspacing="0" width="100%" data-bs-toggle="table" data-bs-locale="pl-PL">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nazwa</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            {foreach $categories as $element}
+                                                <tr>
+                                                    <td>{$element->id}</td>
+                                                    <td>{$element->name}</td>
+                                                    <td class="text-center">
+                                                        <div class="btn-group inline">
+                                                            <button type="button" class="btn btn-success" data-bs-target="#editModal" data-bs-toggle="modal" 
+                                                                data-category-id="{$element->id}" data-category-name="{$element->name}"><i class="fas fa-edit" style="font-size: 16px"></i>Edytuj</button>
+                                                            <button type="button" class="btn btn-danger" data-bs-target="#deleteModal" data-bs-toggle="modal"
+                                                               data-category-id="{$element->id}" data-category-name="{$element->name}"><i class="fas fa-trash-alt" style="font-size: 16px"></i>Usuń</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            {/foreach}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                </fieldset>
+            </div>
+            <hr />
+        </div>
+    </div>
+    
+
+{/block}
+    
+{block script}
+    <script>
+
+        $(document).ready (function (){
+            $('#editModal').on('show.bs.modal', function(e) {
+                const categoryId = $(e.relatedTarget).data('category-id');
+                const categoryName = $(e.relatedTarget).data('category-name');
+
+                
+                $(e.currentTarget).find('form').attr('action', './categories/edit/' + categoryId);
+                $(e.currentTarget).find('input[name="categoryName"]').val(categoryName);
+
+            });
+            
+            $('#deleteModal').on('show.bs.modal', function(e) {
+                const categoryId = $(e.relatedTarget).data('category-id');
+                const categoryName = $(e.relatedTarget).data('category-name');
+                
+                $(e.currentTarget).find('#deleteCategoryName').text(categoryName);
+                $(e.currentTarget).find('#deleteCategoryHref').click(function() {
+                    location.href = "./categories/delete/" + categoryId;
+                });
+            });
+        });
+    </script>
+{/block}

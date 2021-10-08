@@ -1,0 +1,213 @@
+{layout 'layouts/layout.latte'}
+
+{block title}Produkty{/block}
+
+
+{block content}
+
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="editModalLabel">Edytuj produkt</h5>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" id="editForm" action="./products/edit/1">
+                <div class="form-group">
+                    <label for="productName" class="col-form-label">Tytuł produktu:</label>
+                    <input type="text" class="form-control" name="productName" id="editproductName">
+                </div>
+                <div class="form-group">
+                    <label for="productDescription" class="col-form-label">Opis produktu:</label>
+                    <input type="text" class="form-control" name="productDescription" id="editproductName">
+                </div>
+                <div class="form-group">
+                    <label for="productStatus" class="col-form-label">Status</label>
+                    <select name="productStatus" id="editstatus" class="form-control">
+                        <option value="1">Dostępny</option>
+                        <option value="2">Brak</option>
+                        <option value="3">Wycofany</option>
+                    </select>
+                </div>       
+                <div class="form-group">
+                    <label for="categoryId" class="col-form-label">Kategoria</label>
+                    <select name="categoryId" id="categoryId" class="form-control">
+                        {foreach $categories as $element}
+                            <option value="{$element->id}">{$element->name}</option>
+                        {/foreach}
+                    </select>
+                </div>                 
+            </div>
+            <div class="modal-footer text-center">
+                <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+            </div>
+        </form>
+        </div>
+    </div>
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Czy na pewno chcesz usunąć produkt "<span id="deleteproductName"></span>"?</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <button type="submit" class="btn btn-md btn-danger" id="deleteproductHref">Tak</button>
+                <button type="button" class="btn btn-md btn-primary" data-bs-dismiss="modal" aria-label="Close" class="btn btn-primary">Nie</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    
+    <div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="newModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newModalLabel">Nowy produkt</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <div class="modal-body">
+            <form method="POST" id="newForm" action="./products">
+                <div class="form-group">
+                    <label for="productName" class="col-form-label">Tytuł produktu:</label>
+                    <input type="text" class="form-control" name="productName" id="newproductName">
+                </div>
+                <div class="form-group">
+                    <label for="productDescription" class="col-form-label">Opis produktu:</label>
+                    <input type="text" class="form-control" name="productDescription" id="newproductName">
+                </div>
+                <div class="form-group">
+                    <label for="productStatus" class="col-form-label">Status</label>
+                    <select name="productStatus" id="newstatus" class="form-control">
+                        <option value="1">Dostępny</option>
+                        <option value="2">Brak</option>
+                        <option value="3">Wycofany</option>
+                    </select>
+                </div>       
+                <div class="form-group">
+                    <label for="categoryId" class="col-form-label">Kategoria</label>
+                    <select name="categoryId" id="newcategoryId" class="form-control">
+                        {foreach $categories as $element}
+                            <option value="{$element->id}">{$element->name}</option>
+                        {/foreach}
+                    </select>
+                </div>                      
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                <button type="submit" class="btn btn-primary">Dodaj produkt</button>
+            </div>
+        </form>
+        </div>
+    </div>
+    </div>
+
+    <div class="container body-content">
+    <button type="button" class="btn btn-primary" style="margin: 15px" onclick="location.href='./home'">Wróć do menu</button>
+        <div class="page-header">
+            <h2 style="text-align: center">Produkty</h2>
+            <div class="form-group">
+                <fieldset>
+                    <form action="" class="form-group" method="post">
+                        <div class="table-responsive">
+                            <div class="table-responsive">     
+                                <button type="button" class="float-right btn btn-primary" data-bs-target="#newModal" data-bs-toggle="modal" style="margin: 15px">Dodaj produkt</button>     
+
+                                <div>
+                                    {foreach $errors as $element}
+                                        {foreach $element as $message}
+                                            <h6 style="color: red;">{$message}</h6>
+                                        {/foreach}
+                                    {/foreach}
+                                </div>
+
+                                <table id="table" class="table table-striped table-bordered" cellspacing="0" width="100%" data-bs-toggle="table" data-bs-locale="pl-PL">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Tytuł</th>
+                                            <th>Opis</th>
+                                            <th>Status</th>
+                                            <th>Kategoria</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            {foreach $products as $element}
+                                                <tr>
+                                                    <td>{$element->id}</td>
+                                                    <td>{$element->name}</td>
+                                                    <td>{$element->description}</td>
+
+                                                    {if $element->status == 1}
+                                                        <td>Dostępny</td>
+                                                    {elseif $element->status == 2}
+                                                        <td>Brak</td>
+                                                    {else}
+                                                        <td>Wycofany</td>
+                                                    {/if}
+
+                                                    <td>{$element->categoryName}</td>
+                                                    <td class="text-center">
+                                                        <div class="btn-group inline">
+                                                            <button type="button" class="btn btn-success" data-bs-target="#editModal" data-bs-toggle="modal" 
+                                                                data-product-id="{$element->id}" data-product-name="{$element->name}" data-product-description="{$element->description}" data-product-status="{$element->status}" data-product-category="{$element->category_id}"><i class="fas fa-edit" style="font-size: 16px"></i>Edytuj</button>
+                                                            <button type="button" class="btn btn-danger" data-bs-target="#deleteModal" data-bs-toggle="modal"
+                                                                data-product-id="{$element->id}" data-product-name="{$element->name}"><i class="fas fa-trash-alt" style="font-size: 16px"></i>Usuń</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            {/foreach}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                </fieldset>
+            </div>
+            <hr />
+        </div>
+    </div>
+    
+
+{/block}
+    
+{block script}
+    <script>
+
+        $(document).ready (function (){
+            $('#editModal').on('show.bs.modal', function(e) {
+                const productId = $(e.relatedTarget).data('product-id');
+                const productName = $(e.relatedTarget).data('product-name');
+                const productDescription = $(e.relatedTarget).data('product-description');
+                const productStatus = $(e.relatedTarget).data('product-status');
+                const productCategory = $(e.relatedTarget).data('product-category');
+                
+                $(e.currentTarget).find('form').attr('action', './products/edit/' + productId);
+                $(e.currentTarget).find('input[name="productName"]').val(productName);
+                $(e.currentTarget).find('input[name="productDescription"]').val(productDescription);
+                $(e.currentTarget).find('select[name="productStatus"]').val(productStatus);
+                $(e.currentTarget).find('select[name="categoryId"]').val(productCategory);
+            });
+            
+            $('#deleteModal').on('show.bs.modal', function(e) {
+                const productId = $(e.relatedTarget).data('product-id');
+                const productName = $(e.relatedTarget).data('product-name');
+                
+                $(e.currentTarget).find('#deleteproductName').text(productName);
+                $(e.currentTarget).find('#deleteproductHref').click(function() {
+                    location.href = "./products/delete/" + productId;
+                });
+            });
+        });
+    </script>
+{/block}

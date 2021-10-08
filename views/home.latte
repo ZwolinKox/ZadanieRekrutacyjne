@@ -1,0 +1,27 @@
+{layout 'layouts/layout.latte'}
+
+{block title}Strona główna{/block}
+
+
+{block content}
+
+<div class="container  px-5">
+    <div class="card-deck">
+        <a href="./products" class="card border-secondary text-center my-card my-card-link">
+            <div class="card-body">
+                <h4 class="card-title">Artykuły</h4>
+            </div>
+        </a>
+    </div>
+
+    <div class="card-deck">
+        <a href="./categories" class="card border-secondary text-center my-card my-card-link">
+            <div class="card-body">
+                <h4 class="card-title">Kategorie</h4>
+            </div>
+        </a>
+    </div>
+
+</div>
+
+{/block}

@@ -1,0 +1,23 @@
+{
+    "name": "szymonzwolinski/aurora",
+    "description": "Zadanie rekrutacyjne dla firmy Aurora Creation",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Aurora\\": "src"
+        }
+    },
+    "authors": [
+        {
+            "name": "Szymon Zwolinski",
+            "email": "szymon.zwolinski2001@gmail.com"
+        }
+    ],
+    "require": {
+        "phroute/phroute": "^2.1",
+        "latte/latte": "^2.10",
+        "rakit/validation": "^1.4",
+        "nesbot/carbon": "^2.53",
+        "vlucas/phpdotenv": "^5.3"
+    }
+}
